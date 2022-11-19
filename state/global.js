@@ -68,7 +68,7 @@ export const GlobalState = ({ children }) => {
     const posts = await program.account.post.all();
     setPosts(posts.map((post) => post.account));
   }, [program]);
-
+  console.log(posts)
   // Get and update posts
   useEffect(() => {
     if (!posts) {

@@ -13,7 +13,8 @@ const nextConfig = {
       'picsum.photos',
       'avatars.dicebear.com',
       'upcdn.io',
-      'avatars.githubusercontent.com'
+      'avatars.githubusercontent.com',
+      'cdn.discordapp.com'
     ],
   },
 }
