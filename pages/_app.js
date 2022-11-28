@@ -15,7 +15,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-import Main from "./Main";
+// import Main from "./Main";
 import { RPC_ENDPOINT } from "../utils";
 import { GlobalState } from "../state/global";
 

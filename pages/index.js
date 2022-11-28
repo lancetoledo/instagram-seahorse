@@ -4,9 +4,22 @@ import Stories from '../components/stories/Stories';
 import HomeRightBar from '../components/HomeRightBar';
 import FeedItem from '../components/feed/Item';
 import { useGlobalState } from "../hooks";
+import { useState } from 'react';
+
+import EditPostModal from '../components/modals/EditPostModal';
+import CreatePostModal from '../components/modals/CreatePostModal';
 
 export default function Home() {
+  const [editPostModalOpen, setEditPostModalOpen] = useState(false)
+  const [createPostModalOpen, setCreatePostModalOpen] = useState(false)
+  const [currentEditPostID, setCurrentEditPostID] = useState(null)
 
+  const toggleEditPostModal = (value, postId, owner) => {
+    setCurrentEditPostID(postId)
+
+
+    setEditPostModalOpen(value)
+  }
 
   const style = {
     container: `homepage-feed lg:mr-8 flex flex-col`,
@@ -21,42 +34,33 @@ export default function Home() {
     createUser,
     createPost,
     updatePost,
-    deletePost,
-    likePost,
-    dislikePost,
   } = useGlobalState();
 
 
   return (
-    <Layout>
+    <Layout
+      setCreatePostModalOpen={setCreatePostModalOpen}
+    >
       <div className={style.container}>
         <Stories stories={data.stories} />
 
         <>
-          {/* <WalletMultiButton /> */}
-          {console.log(hasUserAccount, "AHH")}
-          {hasUserAccount ? (
-            <button
-              onClick={() =>
-                createPost(
-                  "Title",
-                  "https://cdn.discordapp.com/avatars/202176522075897866/a_76ca08f62f47e9c5629a0844a361c208.gif"
-                )
-              }
-            >
-              Create post
-            </button>
-          ) : (
-            isConnected && <button onClick={createUser}>Create user</button>
-          )}
-
           {/* Render posts */}
           {posts
             ? posts.map((post, i) => (
-              <FeedItem data={post} key={i} />
+              <FeedItem
+                data={post}
+                key={i}
+                walletKey={wallet?.publicKey}
+                setEditPostModalOpen={setEditPostModalOpen}
+                toggleEditPostModal={toggleEditPostModal}
+
+              />
             ))
             : "Loading..."}
         </>
+        <CreatePostModal createPost={createPost} createPostModalOpen={createPostModalOpen} setCreatePostModalOpen={setCreatePostModalOpen} />
+        <EditPostModal updatePost={updatePost} editPostModalOpen={editPostModalOpen} setEditPostModalOpen={setEditPostModalOpen} currentEditPostID={currentEditPostID} />
 
 
         {/* {feed.map((item, index) => (

@@ -14,7 +14,8 @@ const nextConfig = {
       'avatars.dicebear.com',
       'upcdn.io',
       'avatars.githubusercontent.com',
-      'cdn.discordapp.com'
+      'cdn.discordapp.com',
+      'images.unsplash.com'
     ],
   },
 }

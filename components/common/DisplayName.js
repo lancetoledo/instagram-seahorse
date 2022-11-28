@@ -1,14 +1,13 @@
 import Router from 'next/router'
 
-const DisplayName = ({ username, ...props }) => {
+const DisplayName = ({ username, user }) => {
+
     return (
-        <a
+        <p
             className='text-14-bold mr-1 cursor-pointer'
-            onClick={() => Router.push('/[pid]', `/${username}`)}
-            {...props}
         >
-            {username || 'Please connect your wallet'}
-        </a>
+            {username}
+        </p>
     )
 }
 

@@ -1,5 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
 
-export const RPC_ENDPOINT = "https://shy-tiniest-firefly.solana-devnet.discover.quiknode.pro/35f9f31362c89f4da43ebdfe5b4397093029d649/";
+export const RPC_ENDPOINT = "https://thrilling-tiniest-log.solana-devnet.discover.quiknode.pro/32db1054321331044575a09be9d349ba91f116ae/";
 
-export const PROGRAM_ID = new PublicKey("8adFa3vk8Vdqpz5M29e3xFJ96nToSfb8yan5er4UTZhm")
+export const PROGRAM_ID = new PublicKey("5ExEq9ZxGfwSyw5ov4UFK7ws9NpDf2KnUk3wLqfAir4m")

@@ -5,10 +5,10 @@ const style = {
     appContainer: `homepage-container flex justify-center`,
 }
 
-const Layout = ({ children }) => {
+const Layout = ({ children, setCreatePostModalOpen }) => {
     return (
         <div className={style.wrapper}>
-            <Header />
+            <Header setCreatePostModalOpen={setCreatePostModalOpen} />
             <div className={style.appContainer}>{children}</div>
         </div>
     )

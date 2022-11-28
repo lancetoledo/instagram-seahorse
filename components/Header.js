@@ -1,21 +1,18 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-// import { ConnectButton } from '@rainbow-me/rainbowkit'
-// import { Uploader } from 'uploader'
 import Modal from 'react-modal'
 
-// import SearchBar from './SearchBar'
-// import UploadModal from './UploadModal'
 
-// import { modalStyles } from '../utils/constants'
 
 import { GrHomeRounded } from 'react-icons/gr'
 import { AiOutlineCloudUpload } from 'react-icons/ai'
 import { IoPaperPlaneOutline } from 'react-icons/io5'
+import { HiPlus } from 'react-icons/hi'
+
 
 // Solana Imports
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-
+import { useGlobalState } from '../hooks'
 
 Modal.setAppElement('#__next')
 
@@ -25,33 +22,28 @@ Modal.setAppElement('#__next')
 
 const style = {
     wrapper: `navigation fixed z-20 top-0`,
-    headerContainer: `header-container`,
+    headerContainer: `header-container `,
     logoContainer: `h-[1.8rem] w-[6.4rem] relative mt-[.6rem]`,
     image: `object-contain`,
-    headerMain: `header-icons flex ml-auto items-center`,
+    headerMain: `header-icons flex ml-auto items-center justify-around`,
     headerIcon: `mr-[.8rem] cursor-pointer`,
+    button: `border rounded-lg p-4 text-xs font-medium`,
 }
 
-const Header = () => {
+const Header = ({ setCreatePostModalOpen }) => {
     const router = useRouter()
 
-    // const openUploader = () => {
-    //     {
-    //         uploader
-    //             .open({ multi: false })
-    //             .then(files => {
-    //                 if (files.length === 0) {
-    //                     alert('No files selected.')
-    //                 } else {
-    //                     router.push(`/?image=${files[0].fileUrl}`)
-    //                 }
-    //             })
-    //             .catch(error => {
-    //                 console.error(error)
-    //             })
-    //     }
-    // }
-
+    //SOLANA STUFF
+    const {
+        isConnected,
+        wallet,
+        hasUserAccount,
+        posts,
+        createUser,
+        createPost,
+        updatePost,
+    } = useGlobalState();
+    console.log(hasUserAccount, isConnected, "HELLO???")
     return (
         <nav className={style.wrapper}>
             <div className={style.headerContainer}>
@@ -63,25 +55,17 @@ const Header = () => {
 
                 <div className={style.headerMain}>
                     <GrHomeRounded className={style.headerIcon} size={20} />
-                    <IoPaperPlaneOutline className={style.headerIcon} size={22} />
+                    <HiPlus className={style.headerIcon} size={22} onClick={() => setCreatePostModalOpen(true)} />
 
-                    <AiOutlineCloudUpload
-                        className={style.headerIcon}
-                        size={22}
-                    // onClick={openUploader}
-                    />
+                    {!hasUserAccount && isConnected ? (
+                        <button className={style.button} onClick={createUser}>Create user</button>
+                    ) : (
+                        <></>
+                    )}
 
                     <WalletMultiButton />
                 </div>
             </div>
-
-            <Modal
-                isOpen={!!router.query.image}
-                onRequestClose={() => router.push('/')}
-            // style={modalStyles}
-            >
-                {/* <UploadModal /> */}
-            </Modal>
         </nav>
     )
 }

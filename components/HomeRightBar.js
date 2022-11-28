@@ -4,6 +4,8 @@ import DisplayName from './common/DisplayName'
 // import { useAccount } from 'wagmi'
 import { useEffect, useState } from 'react'
 // import truncateEthAddress from 'truncate-eth-address'
+import { useGlobalState } from '../hooks'
+import { truncate } from '../utils/truncate'
 
 const style = {
     wrapper: `suggestions hidden lg:flex lg:flex-col`,
@@ -15,7 +17,17 @@ const style = {
 const HomeRightBar = ({ data }) => {
     const [userAddress, setUserAddress] = useState('')
     // const { address } = useAccount()
-    const user = "lance"
+
+    //SOLANA STUFF
+    const {
+        isConnected,
+        wallet,
+        hasUserAccount,
+        posts,
+        createUser,
+        createPost,
+        updatePost,
+    } = useGlobalState();
 
     //   useEffect(() => {
     //     if (address) {
@@ -28,19 +40,10 @@ const HomeRightBar = ({ data }) => {
             {data && (
                 <>
                     <div className={style.userInfoContainer}>
-                        <div className={style.imageContainer}>
-                            <Image
-                                src={`https://avatars.dicebear.com/api/pixel-art/${user}.svg`}
-                                layout='fill'
-                                className={style.image}
-                                alt={0}
-                            />
-                        </div>
                         <div className='user-info-texts ml-5 flex flex-col'>
-                            Welcome back,
                             <DisplayName
                                 style={{ paddingBottom: 2, paddingTop: 2 }}
-                                username={userAddress}
+                                user={userAddress}
                             />
                         </div>
                     </div>

@@ -6,7 +6,10 @@ import ActionButtons from './ActionButtons'
 import Caption from './Caption'
 // import AddComment from '../AddComment'
 import PostImage from './PostImage'
-// import truncateEthAddress from 'truncate-eth-address'
+import { truncate } from '../../utils/truncate'
+
+import { useGlobalState } from "../../hooks";
+
 
 const style = {
     wrapper: `feed-item-container flex flex-col`,
@@ -14,26 +17,47 @@ const style = {
     likesContainer: `feed-item-text text-14-bold mr-1 ml-4`,
 }
 
-const FeedItem = ({ data }) => {
-    // const { userAddress } = useAppContext()
+const FeedItem = ({ data, walletKey, setEditPostModalOpen, toggleEditPostModal, setCreatePostModalOpen }) => {
+    const {
+        isConnected,
+        wallet,
+        hasUserAccount,
+        posts,
+        createUser,
+        createPost,
+        updatePost,
+        deletePost,
+        likePost,
+        dislikePost,
+    } = useGlobalState();
+
+
     const [randomLikeNumber, setRandomLikeNumber] = useState(0)
-    console.log(data)
     useEffect(() => {
         setRandomLikeNumber(Math.floor(Math.random() * 100))
     }, [])
 
     return (
         <Border className={style.wrapper}>
-            <PostHeader username={data.owner.toString()} />
-            <PostImage imgUrl={data.image} />
+            <PostHeader username={data.owner.toString()} owner={data.owner} postId={data.id} />
+            <PostImage imgUrl={data.image} alt="post" />
 
-            <ActionButtons id={data.id.toString()} className={style.buttonsContainer} />
+            <ActionButtons
+                id={data.id.toString()}
+                className={style.buttonsContainer}
+                owner={data.owner}
+                postId={data.id}
+                walletKey={walletKey}
+                setEditPostModalOpen={setEditPostModalOpen}
+                toggleEditPostModal={toggleEditPostModal}
+                setCreatePostModalOpen={setCreatePostModalOpen}
+            />
 
             <a className={style.likesContainer}>{data.likes.toString()} likes</a>
 
             <Caption
                 data={{
-                    username: "lance",
+                    username: truncate(data.owner.toString()),
                     caption: data.title,
                 }}
             />

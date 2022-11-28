@@ -47,28 +47,32 @@ export const GlobalState = ({ children }) => {
   }, [wallet]);
 
   const fetchUserAccount = useCallback(async () => {
-    if (!program) return;
-
+    // if (!program) return;
+    console.log("fetching user account..", wallet?.publicKey)
     try {
-      const userAccountPk = await getUserAccountPk(wallet.publicKey);
+      const userAccountPk = await getUserAccountPk(wallet?.publicKey);
+      console.log(userAccountPk)
       const userAccount = await program.account.user.fetch(userAccountPk);
+      console.log("user found!")
       setUserAccount(userAccount);
     } catch (e) {
       setUserAccount(null);
+      console.log("no user found!")
     }
   }, [program]);
 
   // Check for user account
   useEffect(() => {
     fetchUserAccount();
-  }, []);
+  }, [isConnected]);
 
   const fetchPosts = useCallback(async () => {
     if (!program) return;
     const posts = await program.account.post.all();
+    console.log("getting posts...", posts)
     setPosts(posts.map((post) => post.account));
   }, [program]);
-  console.log(posts)
+  // console.log(posts)
   // Get and update posts
   useEffect(() => {
     if (!posts) {
@@ -182,7 +186,7 @@ export const GlobalState = ({ children }) => {
 
   const createUser = useCallback(async () => {
     if (!program) return;
-
+    console.log("creating user")
     try {
       await airdrop();
       const txHash = await program.methods
@@ -203,7 +207,7 @@ export const GlobalState = ({ children }) => {
   const createPost = useCallback(
     async (title, image) => {
       if (!userAccount) return;
-
+      console.log("creating post!", wallet?.publicKey)
       try {
         const postId = userAccount.lastPostId.addn(1);
         const txHash = await program.methods
@@ -229,7 +233,7 @@ export const GlobalState = ({ children }) => {
   const updatePost = useCallback(
     async (owner, id, title) => {
       if (!userAccount) return;
-
+      console.log("updating")
       try {
         const txHash = await program.methods
           .updatePost(title)
@@ -248,8 +252,9 @@ export const GlobalState = ({ children }) => {
 
   const deletePost = useCallback(
     async (owner, id) => {
+      console.log("CLICKED", owner, id)
       if (!userAccount) return;
-
+      console.log("Deleting")
       try {
         const txHash = await program.methods
           .deletePost()
@@ -269,15 +274,15 @@ export const GlobalState = ({ children }) => {
   const likePost = useCallback(
     async (owner, id, liker) => {
       if (!userAccount) return;
-
+      console.log("liking")
       try {
         const txHash = await program.methods
           .likePost()
           .accounts({
             like: await getLikeAccountPk(owner, id, liker),
             post: await getPostAccountPk(owner, id),
-            user: await getUserAccountPk(wallet.publicKey),
-            owner: wallet.publicKey,
+            user: await getUserAccountPk(wallet?.publicKey),
+            owner: wallet?.publicKey,
           })
           .rpc();
         console.log("Liked post", txHash);
@@ -308,13 +313,13 @@ export const GlobalState = ({ children }) => {
     },
     [userAccount]
   );
-
+  console.log(userAccount)
   return (
     <GlobalContext.Provider
       value={{
         isConnected,
         wallet,
-        hasUserAccount: !!userAccount,
+        hasUserAccount: userAccount ? true : false,
         posts,
         fetchPosts,
         createUser,

@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import DisplayName from '../common/DisplayName'
-import { FiMoreHorizontal } from 'react-icons/fi'
+import { AiOutlineClose } from 'react-icons/ai'
+import { useGlobalState } from "../../hooks";
+import { truncate } from '../../utils/truncate';
 
 const style = {
     wrapper: `feed-item-header pl-4 pr-4 bg-white flex items-center`,
@@ -9,8 +11,21 @@ const style = {
     usernameContainer: `feed-item-header-text text-14-bold mr-1 ml-4 cursor-pointer`,
     moreIcon: `ml-auto flex`,
 }
+//
 
-const PostHeader = ({ username }) => {
+const PostHeader = ({ username, owner, postId }) => {
+    const {
+        isConnected,
+        wallet,
+        // hasUserAccount,
+        posts,
+        createUser,
+        createPost,
+        updatePost,
+        deletePost,
+        dislikePost,
+    } = useGlobalState();
+
     return (
         <div className={style.wrapper}>
             <div className={style.profileImageContainer}>
@@ -22,10 +37,10 @@ const PostHeader = ({ username }) => {
                 />
             </div>
 
-            <DisplayName className={style.usernameContainer} username={username} />
+            <DisplayName className={style.usernameContainer} username={truncate(username)} />
 
             <button className={style.moreIcon}>
-                <FiMoreHorizontal />
+                <AiOutlineClose onClick={() => deletePost(owner, postId)} />
             </button>
         </div>
     )
